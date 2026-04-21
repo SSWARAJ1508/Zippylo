@@ -5,18 +5,16 @@
   font-family: 'Segoe UI', sans-serif;
 }
 
-/* NAVBAR (bigger) */
+/* NAVBAR */
 .navbar {
   position: fixed;
   top: 25px;
   left: 50%;
   transform: translateX(-50%);
   width: 94%;
-
   display: flex;
   justify-content: space-between;
   align-items: center;
-
   background: rgba(255,255,255,0.06);
   backdrop-filter: blur(20px);
   border-radius: 70px;
@@ -61,7 +59,7 @@
   color: white;
 }
 
-/* CONTACT BTN */
+/* CONTACT BUTTON */
 .contact-btn {
   padding: 14px 30px;
   border-radius: 30px;
@@ -79,11 +77,9 @@
   align-items: center;
   padding-left: 6%;
   position: relative;
-
   background:
     linear-gradient(rgba(10,20,40,0.75), rgba(10,20,40,0.75)),
     url("background.png");
-
   background-size: cover;
 }
 
@@ -95,13 +91,11 @@
   font-size: 60px;
   font-weight: bold;
   color: #ffd54f;
-
   text-shadow:
     0 0 5px #ffd54f,
     0 0 10px #ffd54f,
     0 0 20px #ffb300,
     0 0 40px #ffb300;
-
   opacity: 0;
   transform: translateX(120px);
   animation: neonIn 1.2s ease forwards, neonBlink 2s infinite;
@@ -115,7 +109,6 @@
   max-width: 500px;
   font-size: 42px;
   color: white;
-
   opacity: 0;
   transform: translateX(100px);
   animation: slideRight 1.2s ease forwards;
@@ -131,15 +124,12 @@
   max-width: 600px;
   padding: 50px;
   border-radius: 24px;
-
   background: rgba(255,255,255,0.08);
   backdrop-filter: blur(20px);
   border: 1px solid rgba(255,255,255,0.2);
-
   box-shadow:
     0 15px 50px rgba(0,0,0,0.4),
     0 0 30px rgba(255,213,79,0.15);
-
   animation: slideLeft 1s ease forwards;
 }
 
@@ -188,7 +178,7 @@
   transform: translateY(-4px) scale(1.05);
 }
 
-/* DARK SECTIONS */
+/* SECTIONS */
 .section {
   height: 100vh;
   display: flex;
@@ -249,4 +239,71 @@ footer {
 @keyframes neonBlink {
   0%,100% { opacity: 1; }
   50% { opacity: 0.7; }
+}
+
+/* ================= RESPONSIVE ================= */
+.menu-toggle {
+  display: none;
+}
+
+@media (max-width: 768px) {
+
+  .menu-toggle {
+    display: block;
+    color: white;
+    font-size: 24px;
+  }
+
+  .nav-center {
+    position: absolute;
+    top: 80px;
+    left: 0;
+    width: 100%;
+    flex-direction: column;
+    background: rgba(0,0,0,0.95);
+    padding: 20px;
+    display: none;
+  }
+
+  .nav-center.active {
+    display: flex;
+  }
+
+  .contact-btn {
+    display: none;
+  }
+
+  .hero {
+    flex-direction: column;
+    padding: 120px 20px;
+  }
+
+  .neon-text {
+    position: static;
+    font-size: 36px;
+    margin-bottom: 10px;
+  }
+
+  .glass-card {
+    width: 100%;
+    padding: 25px;
+  }
+
+  .glass-card h1 {
+    font-size: 28px;
+  }
+
+  .hero-big-text {
+    position: static;
+    font-size: 22px;
+    margin-top: 20px;
+  }
+
+  .buttons {
+    flex-direction: column;
+  }
+
+  .btn {
+    width: 100%;
+  }
 }
