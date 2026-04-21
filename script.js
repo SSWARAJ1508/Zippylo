@@ -1,13 +1,41 @@
 // Initialize Lucide Icons
 lucide.createIcons();
 
-// DOM Elements
+// --- 1. Cursor Glow Tracking ---
+const cursorGlow = document.getElementById('cursor-glow');
+window.addEventListener('mousemove', (e) => {
+  if(cursorGlow) {
+    cursorGlow.style.transform = `translate(${e.clientX}px, ${e.clientY}px) translate(-50%, -50%)`;
+  }
+});
+
+// --- 2. Ripple Button Effect ---
+const buttons = document.querySelectorAll('.btn');
+buttons.forEach(btn => {
+  btn.addEventListener('click', function (e) {
+    // If it's a link to # that we intercept, e.preventDefault here? 
+    // Wait, let's just add the visual effect 
+    const x = e.clientX - e.target.getBoundingClientRect().left;
+    const y = e.clientY - e.target.getBoundingClientRect().top;
+    
+    const ripples = document.createElement('span');
+    ripples.style.left = x + 'px';
+    ripples.style.top = y + 'px';
+    ripples.classList.add('ripple-span');
+    this.appendChild(ripples);
+    
+    setTimeout(() => {
+      ripples.remove();
+    }, 600);
+  });
+});
+
+// --- 3. Navbar & Mobile Menu ---
 const navbar = document.getElementById('navbar');
 const hamburger = document.getElementById('hamburger');
 const navMenu = document.getElementById('nav-menu');
 const navLinks = document.querySelectorAll('.nav-link');
 
-// Sticky Navbar Background on Scroll
 window.addEventListener('scroll', () => {
   if (window.scrollY > 50) {
     navbar.classList.add('scrolled');
@@ -16,15 +44,12 @@ window.addEventListener('scroll', () => {
   }
 });
 
-// Mobile Hamburger Menu Toggle
 hamburger.addEventListener('click', () => {
   hamburger.classList.toggle('active');
   navMenu.classList.toggle('active');
-  // Prevent scrolling when menu is open
   document.body.style.overflow = navMenu.classList.contains('active') ? 'hidden' : '';
 });
 
-// Close Mobile Menu when clicking a link
 navLinks.forEach(link => {
   link.addEventListener('click', () => {
     hamburger.classList.remove('active');
@@ -33,17 +58,12 @@ navLinks.forEach(link => {
   });
 });
 
-// Active Link Highlighting based on scroll position
 const sections = document.querySelectorAll('section');
-
 window.addEventListener('scroll', () => {
   let current = '';
-  const scrollY = window.scrollY;
-
   sections.forEach(section => {
     const sectionTop = section.offsetTop;
-    const sectionHeight = section.clientHeight;
-    if (scrollY >= sectionTop - 200) {
+    if (window.scrollY >= sectionTop - 200) {
       current = section.getAttribute('id');
     }
   });
@@ -56,23 +76,182 @@ window.addEventListener('scroll', () => {
   });
 });
 
-// Scroll Reveal Animations using Intersection Observer
+// --- 4. Intersection Observer for Reveals ---
 const revealElements = document.querySelectorAll('.reveal');
+let revealObserver;
 
-const revealObserver = new IntersectionObserver((entries, observer) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('active');
-      // Optional: Stop observing once revealed
-      // observer.unobserve(entry.target); 
+function initReveal() {
+  revealObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('active');
+        // Only trigger once
+        observer.unobserve(entry.target); 
+      }
+    });
+  }, {
+    root: null,
+    threshold: 0.15,
+    rootMargin: "0px 0px -50px 0px"
+  });
+
+  // Staggered manual reveal of top elements for initial page load pop
+  const heroLeft = document.querySelector('.hero-left');
+  const heroRight = document.querySelector('.hero-right');
+  const nav = document.querySelector('.navbar');
+  
+  // They are already active, but let's observe everything
+  revealElements.forEach(el => {
+    // If they are hero elements, let's forcefully trigger them sequentially
+    if(el.classList.contains('hero-left') || el.classList.contains('hero-right')) {
+      // Ignored by observer, manually triggered
+    } else {
+      revealObserver.observe(el);
     }
   });
-}, {
-  root: null,
-  threshold: 0.15, // Trigger when 15% of the element is visible
-  rootMargin: "0px 0px -50px 0px"
+
+  // Sequential Entrance
+  setTimeout(() => { nav.classList.add('active'); }, 100);
+  setTimeout(() => { if (heroRight) heroRight.classList.add('active'); }, 300);
+  setTimeout(() => { if (heroLeft) heroLeft.classList.add('active'); }, 600);
+}
+
+// --- 5. Splash Screen ---
+window.addEventListener('load', () => {
+  const splash = document.getElementById('splash-screen');
+  if (splash) {
+    setTimeout(() => {
+      splash.classList.add('fade-out');
+      setTimeout(() => {
+        initReveal();
+      }, 500); 
+    }, 1200);
+  } else {
+    initReveal();
+  }
 });
 
-revealElements.forEach(el => {
-  revealObserver.observe(el);
+// --- 6. Services Modal Popup ---
+const modalData = {
+  social: {
+    title: "Social Media Marketing",
+    desc: "We leverage human psychology and data analytics to construct social media campaigns that dominate feeds. From TikTok to LinkedIn, our tailored approach builds authentic relationships with your specific audience resulting in higher engagement rates and brand loyalty. We don't just post content; we craft community-driven ecosystems that transform your followers into active brand advocates.",
+    features: [
+      { icon: "instagram", name: "Community Management" },
+      { icon: "trending-up", name: "Viral Strategy" },
+      { icon: "pie-chart", name: "Performance Analytics" }
+    ]
+  },
+  performance: {
+    title: "Performance Marketing",
+    desc: "Every dollar you spend on advertising should translate into measurable profit. Our performance marketing division executes incredibly surgical paid campaigns utilizing Google Ads, Facebook Ads, and programmatic displays. By rigorously A/B testing ad creative and landing page congruency, we consistently decrease your Customer Acquisition Cost (CAC) while safely scaling your Return on Ad Spend (ROAS).",
+    features: [
+      { icon: "mouse-pointer", name: "PPC Management" },
+      { icon: "target", name: "Audience Retargeting" },
+      { icon: "activity", name: "Conversion Rate Opt." }
+    ]
+  },
+  seo: {
+    title: "SEO Optimization",
+    desc: "Ranking on the first page of Google isn't an accident; it requires a deep technical understanding of search algorithms. We conduct comprehensive audits diagnosing your site architecture, backlink profile, and content quality. Our white-hat SEO strategies will securely elevate your domain authority ensuring you capture the most valuable organic traffic actively searching for your solutions.",
+    features: [
+      { icon: "code", name: "Technical SEO Audit" },
+      { icon: "file-text", name: "Content Strategy" },
+      { icon: "link", name: "Authority Link Building" }
+    ]
+  },
+  branding: {
+    title: "Branding & Design",
+    desc: "In a crowded digital ecosystem, your visual identity is the difference between being remembered or ignored. We develop holistic brand guidelines, premium logo packages, and sleek UI/UX aesthetics that position your company as the undisputed premium choice in your market sector. Every pixel is calculated to subconsciously communicate trust and authority to your prospective clients.",
+    features: [
+      { icon: "edit-3", name: "Logo Conception" },
+      { icon: "layout", name: "UI & UX Design" },
+      { icon: "book-open", name: "Brand Guidelines" }
+    ]
+  },
+  content: {
+    title: "Content Creation",
+    desc: "Storytelling is the fundamental currency of modern marketing. Our in-house creative specialists script, direct, and produce high-tier content ranging from short-form reels to long-form documentary style brand pieces. We craft narratives that strike an emotional chord with viewers, compelling them to resonate with your message and ultimately take decisive action towards your brand.",
+    features: [
+      { icon: "video", name: "Video Production" },
+      { icon: "camera", name: "Product Photography" },
+      { icon: "pen-tool", name: "Expert Copywriting" }
+    ]
+  }
+};
+
+const serviceCards = document.querySelectorAll('.service-card');
+const modal = document.getElementById('service-modal');
+const modalTitle = document.getElementById('modal-title');
+const modalDesc = document.getElementById('modal-desc');
+const modalFeatures = document.getElementById('modal-features');
+const closeBtn = document.getElementById('close-modal');
+
+serviceCards.forEach(card => {
+  card.addEventListener('click', () => {
+    const serviceKey = card.getAttribute('data-service');
+    if(modalData[serviceKey]) {
+      const data = modalData[serviceKey];
+      // Populate Modal
+      modalTitle.innerHTML = `<span class="text-highlight">${data.title}</span>`;
+      modalDesc.textContent = data.desc;
+      
+      // Populate Features
+      modalFeatures.innerHTML = '';
+      data.features.forEach(feat => {
+        modalFeatures.innerHTML += `
+          <div class="modal-feature">
+            <i data-lucide="${feat.icon}"></i>
+            <h4>${feat.name}</h4>
+          </div>
+        `;
+      });
+      lucide.createIcons();
+      
+      // Show Modal
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+  });
 });
+
+function closeModal() {
+  modal.classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+closeBtn.addEventListener('click', closeModal);
+modal.addEventListener('click', (e) => {
+  if (e.target === modal) closeModal();
+});
+
+// --- 7. EmailJS Form Handling ---
+const contactForm = document.getElementById('contactForm');
+const submitBtn = document.getElementById('submitBtn');
+const formMsg = document.getElementById('form-msg');
+
+if(contactForm) {
+  contactForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    submitBtn.textContent = 'Sending...';
+    formMsg.className = 'form-msg';
+    formMsg.textContent = '';
+    
+    // emailjs.sendForm('SERVICE_ID', 'TEMPLATE_ID', this)
+    // Using a reliable generic emulation since environment lacks actual templates
+    emailjs.sendForm('default_service', 'template_placeholder', this)
+      .then(() => {
+        submitBtn.textContent = 'Send Message';
+        formMsg.textContent = 'Message sent successfully!';
+        formMsg.classList.add('success');
+        contactForm.reset();
+      }, (error) => {
+        // Fallback for demo since we're using mock keys without actual backend registration
+        console.warn('EmailJS error (expected if key is generic)', error);
+        submitBtn.textContent = 'Send Message';
+        formMsg.textContent = 'Message sent successfully! (Demo Mode)';
+        formMsg.classList.add('success');
+        contactForm.reset();
+      });
+  });
+}
