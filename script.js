@@ -4,7 +4,7 @@ lucide.createIcons();
 // --- 1. Cursor Glow Tracking ---
 const cursorGlow = document.getElementById('cursor-glow');
 window.addEventListener('mousemove', (e) => {
-  if(cursorGlow) {
+  if (cursorGlow) {
     cursorGlow.style.transform = `translate(${e.clientX}px, ${e.clientY}px) translate(-50%, -50%)`;
   }
 });
@@ -17,13 +17,13 @@ buttons.forEach(btn => {
     // Wait, let's just add the visual effect 
     const x = e.clientX - e.target.getBoundingClientRect().left;
     const y = e.clientY - e.target.getBoundingClientRect().top;
-    
+
     const ripples = document.createElement('span');
     ripples.style.left = x + 'px';
     ripples.style.top = y + 'px';
     ripples.classList.add('ripple-span');
     this.appendChild(ripples);
-    
+
     setTimeout(() => {
       ripples.remove();
     }, 600);
@@ -86,7 +86,7 @@ function initReveal() {
       if (entry.isIntersecting) {
         entry.target.classList.add('active');
         // Only trigger once
-        observer.unobserve(entry.target); 
+        observer.unobserve(entry.target);
       }
     });
   }, {
@@ -99,11 +99,11 @@ function initReveal() {
   const heroLeft = document.querySelector('.hero-left');
   const heroRight = document.querySelector('.hero-right');
   const nav = document.querySelector('.navbar');
-  
+
   // They are already active, but let's observe everything
   revealElements.forEach(el => {
     // If they are hero elements, let's forcefully trigger them sequentially
-    if(el.classList.contains('hero-left') || el.classList.contains('hero-right')) {
+    if (el.classList.contains('hero-left') || el.classList.contains('hero-right')) {
       // Ignored by observer, manually triggered
     } else {
       revealObserver.observe(el);
@@ -124,7 +124,7 @@ window.addEventListener('load', () => {
       splash.classList.add('fade-out');
       setTimeout(() => {
         initReveal();
-      }, 500); 
+      }, 500);
     }, 1200);
   } else {
     initReveal();
@@ -190,12 +190,12 @@ const closeBtn = document.getElementById('close-modal');
 serviceCards.forEach(card => {
   card.addEventListener('click', () => {
     const serviceKey = card.getAttribute('data-service');
-    if(modalData[serviceKey]) {
+    if (modalData[serviceKey]) {
       const data = modalData[serviceKey];
       // Populate Modal
       modalTitle.innerHTML = `<span class="text-highlight">${data.title}</span>`;
       modalDesc.textContent = data.desc;
-      
+
       // Populate Features
       modalFeatures.innerHTML = '';
       data.features.forEach(feat => {
@@ -207,7 +207,7 @@ serviceCards.forEach(card => {
         `;
       });
       lucide.createIcons();
-      
+
       // Show Modal
       modal.classList.add('active');
       document.body.style.overflow = 'hidden';
@@ -230,13 +230,13 @@ const contactForm = document.getElementById('contactForm');
 const submitBtn = document.getElementById('submitBtn');
 const formMsg = document.getElementById('form-msg');
 
-if(contactForm) {
-  contactForm.addEventListener('submit', function(e) {
+if (contactForm) {
+  contactForm.addEventListener('submit', function (e) {
     e.preventDefault();
     submitBtn.textContent = 'Sending...';
     formMsg.className = 'form-msg';
     formMsg.textContent = '';
-    
+
     // emailjs.sendForm('SERVICE_ID', 'TEMPLATE_ID', this)
     // Using a reliable generic emulation since environment lacks actual templates
     emailjs.sendForm('default_service', 'template_placeholder', this)
@@ -254,4 +254,91 @@ if(contactForm) {
         contactForm.reset();
       });
   });
+}
+
+// --- 8. Chatbot Logic ---
+const chatToggle = document.getElementById('chatbot-toggle');
+const chatWindow = document.getElementById('chatbot-window');
+const chatClose = document.getElementById('chatbot-close');
+const chatMessages = document.getElementById('chatbot-messages');
+const chatForm = document.getElementById('chatbot-form');
+const chatInput = document.getElementById('chatbot-input');
+
+if (chatToggle && chatWindow) {
+  chatToggle.addEventListener('click', () => {
+    chatWindow.classList.toggle('active');
+  });
+
+  chatClose.addEventListener('click', () => {
+    chatWindow.classList.remove('active');
+  });
+
+  chatForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const text = chatInput.value.trim();
+    if (!text) return;
+
+    // Add user message
+    addMessage(text, 'user-msg');
+    chatInput.value = '';
+
+    // Add typing indicator
+    const typingId = addTypingIndicator();
+
+    // Determine response
+    setTimeout(() => {
+      removeTypingIndicator(typingId);
+      const response = getBotResponse(text.toLowerCase());
+      addMessage(response, 'bot-msg');
+    }, 600 + Math.random() * 400); // 600-1000ms delay
+  });
+
+  function addMessage(content, className) {
+    const msgDiv = document.createElement('div');
+    msgDiv.className = `chat-msg ${className}`;
+    msgDiv.textContent = content;
+    chatMessages.appendChild(msgDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+
+  function addTypingIndicator() {
+    const id = 'typing-' + Date.now();
+    const typingDiv = document.createElement('div');
+    typingDiv.className = 'chat-msg bot-msg';
+    typingDiv.id = id;
+    typingDiv.innerHTML = `
+      <div class="typing-indicator">
+        <div class="typing-dot"></div>
+        <div class="typing-dot"></div>
+        <div class="typing-dot"></div>
+      </div>
+    `;
+    chatMessages.appendChild(typingDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+    return id;
+  }
+
+  function removeTypingIndicator(id) {
+    const typingEl = document.getElementById(id);
+    if (typingEl) typingEl.remove();
+  }
+
+  function getBotResponse(input) {
+    if (input.includes('what is digital marketing') || input.includes('digital marketing')) {
+      return "Digital marketing involves promoting brands using online platforms like social media, SEO, and paid advertising.";
+    }
+    if (input.includes('seo')) {
+      return "SEO helps your website rank higher on search engines and drive organic traffic.";
+    }
+    if (input.includes('services') || input.includes('what do you do') || input.includes('offer')) {
+      return "We offer social media marketing, SEO, branding, content creation, and performance marketing.";
+    }
+    if (input.includes('price') || input.includes('cost') || input.includes('how much') || input.includes('pricing')) {
+      return "Pricing depends on your requirements. Please contact us for a custom quote.";
+    }
+    if (input.includes('contact') || input.includes('reach') || input.includes('phone') || input.includes('whatsapp')) {
+      return "You can reach us through the contact form or WhatsApp.";
+    }
+    return "I'm here to help! Please ask about services, SEO, or digital marketing.";
+  }
 }

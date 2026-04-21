@@ -63,6 +63,7 @@
   <header class="navbar" id="navbar">
     <div class="nav-container">
       <a href="#" class="logo">
+        <img src="logo.png" class="brand-logo" alt="Zippylo Logo" />
         <span class="logo-neon">Zippylo</span>
       </a>
 
@@ -240,7 +241,10 @@
               <label for="message">Message</label>
               <textarea id="message" name="message" rows="4" placeholder="How can we help you grow?" required></textarea>
             </div>
-            <button type="submit" class="btn btn-primary glow-btn btn-block" id="submitBtn">Send Message</button>
+            <div style="position:relative;">
+              <button type="submit" class="btn btn-primary glow-btn btn-block" id="submitBtn">Send Message</button>
+              <div id="flying-postcard" class="flying-postcard"><i data-lucide="send"></i></div>
+            </div>
             <p id="form-msg" class="form-msg"></p>
           </form>
         </div>
@@ -271,6 +275,28 @@
       <div class="modal-features" id="modal-features">
         <!-- Javascript populates icons/text based on specific service -->
       </div>
+    </div>
+  </div>
+
+  <!-- CHATBOT WIDGET -->
+  <div class="chatbot-container">
+    <button id="chatbot-toggle" class="chatbot-toggle" aria-label="Open Chat">
+      <i data-lucide="message-circle"></i>
+    </button>
+    <div id="chatbot-window" class="chatbot-window glass-card">
+      <div class="chatbot-header">
+        <h4>Jhunnu Bot</h4>
+        <button id="chatbot-close" class="close-btn" style="position:relative; top:0; right:0;"><i data-lucide="x" style="width:20px;"></i></button>
+      </div>
+      <div id="chatbot-messages" class="chatbot-messages">
+        <div class="chat-msg bot-msg">
+          I'm here to help! Please ask about services, SEO, or digital marketing.
+        </div>
+      </div>
+      <form id="chatbot-form" class="chatbot-input-area">
+        <input type="text" id="chatbot-input" placeholder="Type your message..." autocomplete="off">
+        <button type="submit" class="chatbot-send" aria-label="Send Message"><i data-lucide="send"></i></button>
+      </form>
     </div>
   </div>
 
