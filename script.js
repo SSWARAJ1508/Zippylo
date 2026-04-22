@@ -160,22 +160,22 @@ const modalData = {
       { icon: "link", name: "Authority Link Building" }
     ]
   },
-  branding: {
-    title: "Branding & Design",
-    desc: "In a crowded digital ecosystem, your visual identity is the difference between being remembered or ignored. We develop holistic brand guidelines, premium logo packages, and sleek UI/UX aesthetics that position your company as the undisputed premium choice in your market sector. Every pixel is calculated to subconsciously communicate trust and authority to your prospective clients.",
+  app: {
+    title: "App Development",
+    desc: "We engineer intuitive, high-performance, and scalable mobile applications for Android and iOS. From native applications utilizing Swift and Kotlin to powerful cross-platform solutions deploying React Native or Flutter, our experienced development team translates your unique business concepts into highly engaging software experiences built precisely to scale seamlessly.",
     features: [
-      { icon: "edit-3", name: "Logo Conception" },
-      { icon: "layout", name: "UI & UX Design" },
-      { icon: "book-open", name: "Brand Guidelines" }
+      { icon: "smartphone", name: "Native Mobile Apps" },
+      { icon: "layers", name: "Cross-Platform Development" },
+      { icon: "layout", name: "UI/UX App Design" }
     ]
   },
-  content: {
-    title: "Content Creation",
-    desc: "Storytelling is the fundamental currency of modern marketing. Our in-house creative specialists script, direct, and produce high-tier content ranging from short-form reels to long-form documentary style brand pieces. We craft narratives that strike an emotional chord with viewers, compelling them to resonate with your message and ultimately take decisive action towards your brand.",
+  website: {
+    title: "Website Development",
+    desc: "Dominating the digital era requires more than just a template. We construct fast, responsive, and beautifully secure modern websites tailored precisely for high conversion rates. Our expert development stack bridges front-end aesthetics flawlessly integrating robust back-end systems ensuring your digital presence is built durably for the continuous demands of modern traffic.",
     features: [
-      { icon: "video", name: "Video Production" },
-      { icon: "camera", name: "Product Photography" },
-      { icon: "pen-tool", name: "Expert Copywriting" }
+      { icon: "monitor", name: "Custom Web Development" },
+      { icon: "shopping-cart", name: "E-Commerce Solutions" },
+      { icon: "zap", name: "Performance Optimization" }
     ]
   }
 };
@@ -331,7 +331,7 @@ if (chatToggle && chatWindow) {
       return "SEO helps your website rank higher on search engines and drive organic traffic.";
     }
     if (input.includes('services') || input.includes('what do you do') || input.includes('offer')) {
-      return "We offer social media marketing, SEO, branding, content creation, and performance marketing.";
+      return "We offer social media marketing, SEO, app development, website development, and performance marketing.";
     }
     if (input.includes('price') || input.includes('cost') || input.includes('how much') || input.includes('pricing')) {
       return "Pricing depends on your requirements. Please contact us for a custom quote.";
